@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Solid background color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/splashBackground" />
+        </shape>
+    </item>
+    
+    <!-- Centered "V" shape as app icon placeholder -->
+    <item
+        android:gravity="center"
+        android:width="96dp"
+        android:height="96dp">
+        <shape android:shape="oval">
+            <solid android:color="#2A2A3E" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/splashForeground" />
+        </shape>
+    </item>
+    
+    <!-- V letter in center -->
+    <item
+        android:gravity="center"
+        android:width="48dp"
+        android:height="48dp">
+        <shape android:shape="oval">
+            <solid android:color="#2A2A3E" />
+        </shape>
+    </item>
+</layer-list>

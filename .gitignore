@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+app/build/
+
+# Local config
+local.properties
+
+# Downloaded tools
+tools/
+
+# IDE
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Android
+*.apk
+*.aab
+*.dex
+*.ap_
+captures/
+
+# Logs
+*.log
+
+# Keystore (if ever added)
+*.keystore
+*.jks
