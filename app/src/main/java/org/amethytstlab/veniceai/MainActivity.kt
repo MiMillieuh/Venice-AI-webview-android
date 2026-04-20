@@ -198,7 +198,23 @@ class MainActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
-            ): Boolean = false
+            ): Boolean {
+                val url = request?.url?.toString() ?: return false
+                val uri = Uri.parse(url)
+                
+                // Intercept custom URL schemes (wallet apps, etc.)
+                if (uri.scheme != "http" && uri.scheme != "https") {
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        // No app can handle this URL
+                    }
+                    return true
+                }
+                
+                return false
+            }
         }
         
         webView.webChromeClient = object : WebChromeClient() {
