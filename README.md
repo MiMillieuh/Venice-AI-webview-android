@@ -34,3 +34,9 @@ APK output: `app/build/outputs/apk/debug/app-debug.apk`
 | `network_security_config.xml` | HTTPS enforcement |
 | `res/layout/activity_main.xml` | WebView + ProgressBar layout |
 | `res/values/` | Colors, themes, strings |
+
+## Donations
+
+If you want to support me, it would be appreciated :)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W61L0JLW)
