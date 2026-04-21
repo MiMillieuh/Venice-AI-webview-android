@@ -131,6 +131,7 @@ class MainActivity : AppCompatActivity() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { _ ->
+            KeepAliveService.start(this)
             setupWebView()
             webView.evaluateJavascript(NOTIFICATION_OVERRIDE, null)
             webView.loadUrl(URL)
@@ -270,6 +271,7 @@ class MainActivity : AppCompatActivity() {
         if (permissions.isNotEmpty()) {
             permissionLauncher.launch(permissions.toTypedArray())
         } else {
+            KeepAliveService.start(this)
             setupWebView()
             webView.evaluateJavascript(NOTIFICATION_OVERRIDE, null)
             webView.loadUrl(URL)
@@ -285,6 +287,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onDestroy() {
+        KeepAliveService.stop(this)
         webView.destroy()
         super.onDestroy()
     }
