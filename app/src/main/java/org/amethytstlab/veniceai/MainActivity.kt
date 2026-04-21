@@ -260,11 +260,6 @@ class MainActivity : AppCompatActivity() {
             permissions.add(Manifest.permission.MODIFY_AUDIO_SETTINGS)
         }
         
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.CAMERA)
-        }
-        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -283,12 +278,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        webView.onPause()
     }
     
     override fun onResume() {
         super.onResume()
-        webView.onResume()
     }
     
     override fun onDestroy() {
