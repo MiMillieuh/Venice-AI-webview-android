@@ -1,9 +1,7 @@
 package org.amethytstlab.veniceai
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.Notification
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -12,29 +10,25 @@ import androidx.core.app.NotificationCompat
 class KeepAliveService : Service() {
 
     companion object {
+        private const val NOTIFICATION_ID = 1001
         private const val CHANNEL_ID = "veniceai_keepalive"
-        private const val CHANNEL_NAME = "Venice.AI Active"
-        private const val NOTIFICATION_ID = 1
 
-        fun start(context: Context) {
+        fun start(context: android.content.Context) {
             val intent = Intent(context, KeepAliveService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
-            }
+            context.startForegroundService(intent)
         }
 
-        fun stop(context: Context) {
-            context.stopService(Intent(context, KeepAliveService::class.java))
+        fun stop(context: android.content.Context) {
+            val intent = Intent(context, KeepAliveService::class.java)
+            context.stopService(intent)
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
-
     override fun onCreate() {
         super.onCreate()
-        createNotificationChannel()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
         startForeground(NOTIFICATION_ID, buildNotification())
     }
 
@@ -42,32 +36,31 @@ class KeepAliveService : Service() {
         return START_STICKY
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        stopForeground(STOP_FOREGROUND_REMOVE)
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Keeps Venice.AI running in the background"
-                setShowBadge(false)
-            }
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val channel = android.app.NotificationChannel(
+            CHANNEL_ID,
+            "Background",
+            android.app.NotificationManager.IMPORTANCE_MIN
+        ).apply {
+            description = "Keeps app alive in background"
+            setShowBadge(false)
         }
+        val notificationManager = getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
-    private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setSmallIcon(android.R.drawable.ic_dialog_info)
-        .setContentTitle("Venice AI")
-        .setContentText("Running in background")
-        .setPriority(NotificationCompat.PRIORITY_LOW)
-        .setOngoing(true)
-        .setSilent(true)
-        .build()
+    private fun buildNotification(): Notification {
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setSmallIcon(R.drawable.ic_transparent)
+            .setContentTitle("")
+            .setContentText("")
+            .setShowWhen(false)
+            .setOngoing(true)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+
+        return builder.build()
+    }
 }

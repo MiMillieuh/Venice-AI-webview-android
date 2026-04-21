@@ -266,6 +266,10 @@ class MainActivity : AppCompatActivity() {
                 != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.POST_NOTIFICATIONS)
             }
+            if (ContextCompat.checkSelfPermission(this, "android.permission.FOREGROUND_SERVICE_SPECIAL_USE")
+                != PackageManager.PERMISSION_GRANTED) {
+                permissions.add("android.permission.FOREGROUND_SERVICE_SPECIAL_USE")
+            }
         }
         
         if (permissions.isNotEmpty()) {
