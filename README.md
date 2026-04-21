@@ -7,7 +7,6 @@ A native **UNOFFICIAL** Android WebView wrapper for [venice.ai/chat](https://ven
 ## Features
 
 - **Microphone input** — voice/mic access for chat
-- **Camera access** — photo capture support
 - **File & image uploads** — file picker integrated into WebView
 - **Native notifications** — Android system notifications via WebView bridge
 - **HTTPS-only** — enforced via network security config
