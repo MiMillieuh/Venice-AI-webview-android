@@ -28,9 +28,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var filechooserLauncher: ActivityResultLauncher<String>
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var notificationPermissionLauncher: ActivityResultLauncher<String>
+    private var pendingAssistantQuery: String? = null
     
     companion object {
-        private const val URL = "https://venice.ai/chat"
+        private const val URL = "https://venice.ai/chat?ref=GIpI8r"
         private const val CHANNEL_ID = "veniceai_notifications"
         private const val CHANNEL_NAME = "Venice.AI Notifications"
         
@@ -114,6 +115,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        handleAssistantIntent(intent)
         
         createNotificationChannel()
         
@@ -288,6 +291,34 @@ class MainActivity : AppCompatActivity() {
     
     override fun onResume() {
         super.onResume()
+        pendingAssistantQuery?.let { query ->
+            passQueryToWebView(query)
+            pendingAssistantQuery = null
+        }
+    }
+    
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleAssistantIntent(intent)
+    }
+    
+    private fun handleAssistantIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_ASSIST) {
+            val query = intent.getStringExtra(Intent.EXTRA_TEXT)
+            if (!query.isNullOrBlank()) {
+                if (::webView.isInitialized && webView.url != null) {
+                    passQueryToWebView(query)
+                } else {
+                    pendingAssistantQuery = query
+                }
+            }
+        }
+    }
+    
+    private fun passQueryToWebView(query: String) {
+        val escapedQuery = query.replace("'", "\\'")
+        val javascript = "window.__ASSISTANT_QUERY__ = '$escapedQuery'; window.dispatchEvent(new CustomEvent('assistant-query', { detail: '$escapedQuery' }));"
+        webView.evaluateJavascript(javascript, null)
     }
     
     override fun onDestroy() {
